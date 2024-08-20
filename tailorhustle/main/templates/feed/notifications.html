@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block body %}
+
+    {#    <form id="content-mobile"  method="POST" action="{% url 'search_posts' %}" class="form-inline m-2">#}
+    {#        {% csrf_token %}#}
+    {#        <input style="width: 100%" autocapitalize="none" placeholder="Search Posts"#}
+    {#               class="form-control" name="p" type="text">#}
+    {#    </form>#}
+
+    <center class="m-3">
+        <h3><small><i>Notifications !</i></small></h3>
+    </center>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+
+
+                {% for notification in notifications %}
+                    <div class="card card-signin my-3">
+                        <span><small> {{ notification.ago }} </small> <small> 🟢 </small> {{ notification.message }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script>
+    </script>
+{% endblock %}

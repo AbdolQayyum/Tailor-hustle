@@ -1,0 +1,13 @@
+#*.sqlite3
+*.pyc
+.idea/
+tailorhustle/.env
+*.ipynb
+*.log
+deploy-*
+#*.json
+*.zip
+*.mypy_cache/
+venv/
+sent_mails/
+media/

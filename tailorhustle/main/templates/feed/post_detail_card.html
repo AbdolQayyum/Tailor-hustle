@@ -1,0 +1,185 @@
+<div class="card mx-auto mb-5">
+    <div class="card-body p-0 row">
+        <div class="col-12 col-md-8 pr-md-0">
+            <div class="post__card__img">
+
+                <!-- Post  -->
+                {% if post.post_type == 'image' %}
+                    <img src="{{ post.post_file.url }}" style="width: 100%; max-height: 600px">
+                {% endif %}
+                {% if post.post_type == 'video' %}
+                    <video class="card-img-top" controls autoplay=True loop
+                           style="width: 100%; max-height: 600px">
+                        <source src="/media/{{ post.post_file }}"></source>
+                    </video>
+                {% endif %}
+
+            </div>
+        </div>
+        <div class="col-12 col-md-4 pl-md-0">
+            <div class="card-title post__card__head d-flex justify-content-between px-3 pt-3">
+                <div>
+
+                    <!-- Post Creator Profile picture -->
+                    <span>
+                    {% if post.user.picture %}
+                        <img src="{{ post.user.picture.url }}" class="rounded-circle z-depth-0">
+                    {% else %}
+                        <img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
+                             class="rounded-circle z-depth-0">
+                    {% endif %}  &nbsp; &nbsp;  &nbsp;  &nbsp;
+
+                        {% if post.user == request.user %}
+                            <a class="btn btn-outline-info mr-3" href="{% url 'post-update' post.id %}">Update</a>
+                            <a class="btn btn-outline-danger" href="{% url 'post-delete' post.id %}">Delete</a>
+                        {% endif %}
+                </span>
+                    <!-- Post Creator Profile picture end -->
+
+                    <span class="ml-2">
+
+                    <!-- Post creator username -->
+                    <a href="{% url 'profile_view' post.user.username %}"
+                       class="text-decoration-none text-reset">{{ post.user.fullname }}</a>
+
+                </span>
+                </div>
+            </div>
+            <div class="post__card__reactions d-flex justify-content-between py-3 px-3">
+                <div class="d-flex">
+                    <div class="post__like__btn ml-1 mr-2 row">
+
+                        <!-- Like and Unlike Buttons -->
+                        {% if liked_this_post %}
+                            <form method="POST" action="{% url 'post_like_view' post.id %}">
+                                {% csrf_token %}
+                                <button class="btn p-0 m-0" type="submit"><span class="fas fa-heart"></span></button>
+                            </form>
+                        {% else %}
+                            <form method="POST" action="{% url 'post_like_view' post.id %}">
+                                {% csrf_token %}
+                                <button class="btn p-0 m-0" type="submit"><span class="far fa-heart"></span></button>
+                            </form>
+                        {% endif %}
+                        <!-- Like and Unlike Buttons End -->
+                        <!-- Total likes count -->
+                        <span class="mx-2">{{ post.post_likes }}</span>
+                    </div>
+
+                    <!-- Total views -->
+                    <div class="post__comment__btn ml-1 mr-2 row">
+                        <span class="far fa-eye"></span>
+                        <span class="mx-2">{{ post.post_views }}</span>
+                    </div>
+
+                    <!-- Total comments -->
+                    <div class="post__comment__btn ml-1 mr-2 row">
+                        <span class="far fa-comment"></span>
+                        <span class="mx-2">{{ post.post_comments }}</span>
+                    </div>
+
+                </div>
+                <div>
+                    <div class="post__save__btn">
+
+                        <!-- Post Save Button -->
+
+                        {#                    {% if not post_saved %}#}
+                        {#                        <form method="POST" action="{% url 'post_save_view' post.pk %}">#}
+                        {#                            {% csrf_token %}#}
+                        {#                            <button class="btn p-0 m-0" type="submit">#}
+                        {#                                <span class="far fa-bookmark"></span>#}
+                        {#                            </button>#}
+                        {#                        </form>#}
+                        {#                    {% else %}#}
+                        {#                        <form method="POST" action="{% url 'post_unsave_view' post.pk %}">#}
+                        {#                            {% csrf_token %}#}
+                        {#                            <button class="btn p-0 m-0" type="submit">#}
+                        {#                                <span class="fas fa-bookmark"></span>#}
+                        {#                            </button>#}
+                        {#                        </form>#}
+                        {#                    {% endif %}#}
+                        <!-- Post Save Button end -->
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Post text if any -->
+            {% if post.text %}
+                <div class="post__card__text pt-3 px-2">
+                    <p>{{ post.text }}</p>
+                </div>
+            {% endif %}
+
+            <div class="post__card__comments px-2 py-3 border-top border-bottom">
+                <strong>Comments</strong>
+            </div>
+            <div class="overflow-auto">
+
+                <!-- All the comments on this post -->
+                {% for comment in post.comments_set.all %}
+                    <!-- Single Comment -->
+                    <div class="comment row py-3 px-4">
+                        <a href="{% url 'profile_view' comment.user.username %}"
+                           class="text-reset text-decoration-none form-inline">
+
+                            <!-- Commentor profile picture -->
+                            {% if comment.user.picture %}
+                                <img src="{{ comment.user.picture.url }}"
+                                     class="rounded-circle z-depth-0 profile__pic">
+                            {% else %}
+                                <img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
+                                     class="profile__pic rounded-circle z-depth-0">
+                            {% endif %}
+
+                            <!-- Commentor full name -->
+                            <div class="my-auto ml-2">
+                                <p class="m-0" style="font-size: 14px;">
+                                    {{ comment.user.full_name }}
+                                </p>
+                            </div>
+
+                        </a>
+                        <div class="w-100">
+
+                            <!-- Comment text -->
+                            <p class="m-0 text-wrap" style="font-size: 13px;">
+                                {{ comment.comment }}
+                            </p>
+
+                        </div>
+                    </div>
+                    <!-- Single Comment end -->
+                {% endfor %}
+                <!-- All the comments on this post end -->
+
+            </div>
+            <div class="w-100 my-3">
+
+                <!-- Comment form -->
+                <form class="form-inline justify-content-between mx-2" action="{% url 'post_comment_view' post.id %}"
+                      method="POST">
+                    {% csrf_token %}
+                    <div class="card-title post__card__head d-flex justify-content-between px-4 pt-4">
+                        {% if request.user.picture %}
+                            <img src="{{ request.user.picture.url }}" class="rounded-circle z-depth-0 profile__pic">
+                        {% else %}
+                            <img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
+                                 class="rounded-circle z-depth-0 profile__pic">
+                        {% endif %}
+
+
+                    </div>
+                    <textarea name="comment_text" placeholder="Add your comment..." style="outline: none;border: 0"
+                              class="w-100"
+                              required></textarea>
+
+                    <button type="submit" class="btn btn-sm text-dark font-weight-bold">Post Comment</button>
+                </form>
+                <!-- Comment form end -->
+
+            </div>
+        </div>
+    </div>
+</div>

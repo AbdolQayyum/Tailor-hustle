@@ -1,0 +1,36 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+        
+        
+    - name: Install Dependencies
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        poetry install
+        
+        
+    - name: Run Tests
+      run: |
+        cd tailorhustle
+        poetry run python manage.py test

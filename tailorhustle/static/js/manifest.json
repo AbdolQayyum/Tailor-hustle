@@ -1,0 +1,32 @@
+{
+  "name": "Tailor Hustle",
+  "short_name": "Tailor",
+  "start_url": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ccc",
+  "theme_color": "#5FAAE5",
+  "icons": [
+    {
+      "src": "../images/tailorhustle_images/tailorhustle.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "../images/tailorhustle_images/tailorhustle.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "../images/tailorhustle_images/tailorhustle.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "../images/tailorhustle_images/tailorhustle.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

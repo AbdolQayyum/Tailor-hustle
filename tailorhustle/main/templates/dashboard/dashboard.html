@@ -1,0 +1,118 @@
+{% extends "base2.html" %}
+{% load static %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+          integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="wrapper">
+        <div class="section">
+            <div class="top_navbar">
+                <div class="hamburger">
+                    <a href="#">
+                        <i class="fas fa-bars"></i>
+                    </a>
+                </div>
+            </div>
+            {% block dashboard_data %}
+
+            {% endblock %}
+
+        </div>
+        <div class="sidebar">
+            <div class="profile">
+                {% if request.user.picture %}
+                    <img src="{{ request.user.picture.url }}" alt="profile_picture">
+                {% else %}
+                    <!-- <div class="profile_img" style="background-color: black; width: 100px; height: 100px; border-radius: 50px">
+                        <p style="padding-top: 35%" >{{ request.user.username.0 }}</p>
+                    </div> -->
+                    <p style="padding-top: 30%; font-size: 25px; text-transform: capitalize;">{{ request.user.username.0 }}</p>
+                {% endif %}
+                <h3>{{ request.user.full_name }}</h3>
+                <p>{{ request.user.username }}</p>
+            </div>
+            <ul>
+                <li>
+                    <a href="{% url 'home' %}" class="active">
+                        <span class="icon"><i class="fas fa-home"></i></span>
+                        <span class="item">Home/Feed</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'store_dashboard' %}">
+                        <span class="icon"><i class="fas fa-desktop"></i></span>
+                        <span class="item">My Stats</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'campaign' %}">
+                        <span class="icon"><i class="fas fa-desktop"></i></span>
+                        <span class="item">Campaign</span>
+                    </a>
+                </li>
+                <!-- <li>
+                    <a href="#">
+                        <span class="icon"><i class="fas fa-user-friends"></i></span>
+                        <span class="item">People</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon"><i class="fas fa-tachometer-alt"></i></span>
+                        <span class="item">Perfomance</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon"><i class="fas fa-database"></i></span>
+                        <span class="item">Development</span>
+                    </a>
+                </li> -->
+                <li>
+                    <a href="#Posts Reach">
+                        <span class="icon"><i class="fas fa-chart-line"></i></span>
+                        <span class="item">Posts Reach</span>
+                    </a>
+                </li>
+{#                <li>#}
+{#                    <a href="#Daily Stats2">#}
+{#                        <span class="icon"><i class="fas fa-chart-line"></i></span>#}
+{#                        <span class="item">Other Stats</span>#}
+{#                    </a>#}
+{#                </li>#}
+                <li>
+                    <a href="{% url 'signout_url' %}">
+                        <span class="icon"><i class="fas fa-sign-out"></i></span>
+                        <span class="item">Sign out</span>
+                    </a>
+                </li>
+{#                <li>#}
+{#                    <a href="{% url 'edit_profile' request.user.username %}">#}
+{#                        <span class="icon"><i class="fas fa-cog"></i></span>#}
+{#                        <span class="item">Account Setting</span>#}
+{#                    </a>#}
+{#                </li>#}
+            </ul>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends "dashboard/dashboard.html" %}
+
+{% block dashboard_data %}
+
+    <div class="modal fade" id="addCampaign" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="addCampaignLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCampaignLabel">Add Campaign</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label>Title</label>
+                    <input class="form-control" type="text" name="title" id="title" required>
+                    <label>Discription</label>
+                    <textarea class="form-control" name="text" id="text" required>Description</textarea>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save_campaign">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row m-4">
+        <div class="col-3 offset-9">
+            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addCampaign">
+                Create Campaign
+            </button>
+        </div>
+    </div>
+
+    <div class="container mt-5" style="">
+        <div class="row mr-3 mb-5">
+            <div class="col-sm m-4">
+                <table id="table_db" class="table table-bordered table-hover" style="width: 100%">
+                    <thead>
+                    <tr>
+{#                        <th scope="col" nowrap>Id</th>#}
+                        <th scope="col" nowrap>Title</th>
+                        <th scope="col" nowrap>Discription</th>
+                        <th scope="col" nowrap>Delete</th>
+                        <th scope="col" nowrap>Run Camapign</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for campaign in campaigns %}
+                        <tr>
+{#                            <td scope="row" nowrap>{{ campaign.id }}</td>#}
+                            <td scope="row" title='{{ campaign.title }}' nowrap>{{ campaign.title|truncatechars:20 }}</td>
+                            <td scope="row" title='{{ campaign.text }}' nowrap>{{ campaign.text|truncatechars:50 }}</td>
+                            <td scope="row" nowrap>
+                                <form action="{% url 'delete_campaign' campaign.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button class="ml-4" style="all: unset; cursor: pointer" type="submit">Delete 🗑
+                                    </button>
+                                </form>
+                            </td>
+                            <td scope="row" nowrap>
+                                <form action="{% url 'run_campaign' campaign.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button class="ml-4" style="all: unset; cursor: pointer" type="submit">Run 🚀
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $('#save_campaign').on('click', function (e) {
+
+            var title = $("#title").val()
+            var text = $("#text").val()
+            if (!title || !text) {
+                toastr.error('Not Saved', 'Both Title and Description is required')
+            }
+
+            let data = {
+                "title": title,
+                "text": text,
+                "csrfmiddlewaretoken": '{{ csrf_token }}'
+            };
+            $.ajax({
+                url: '/campaign/',
+                method: 'POST',
+                data: data,
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data)
+                    if (data['message'] == 'success') {
+                        toastr.success("Successfully Saved Campaign");
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1100);
+                    }
+                    if (data['message'] == 'error') {
+                        toastr.error('Not Saved', 'Campaign not saved!')
+                    }
+                },
+                error: function (data) {
+                    toastr.error('Not Saved', 'Something went wrong!')
+                }
+            });
+        });
+
+    </script>
+
+    {#    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>#}
+    {#    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>#}
+
+    <script>
+        $(document).ready(function () {
+            $('#table_db').DataTable({
+                    "paging": true,
+                    "searching": true,
+                    "autoWidth": false,
+                    "ordering": true,
+                    "columnDefs": [
+                        {"width": "50px", "targets": 0},
+                        {"width": "250px", "targets": 1},
+                    ],
+                    aLengthMenu: [
+                        [25, 50, 100, 200, -1],
+                        [25, 50, 100, 200, "All"]
+                    ],
+                }
+            );
+        });
+    </script>
+{% endblock %}

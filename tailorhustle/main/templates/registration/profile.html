@@ -1,0 +1,28 @@
+{#{% extends 'base.html' %}#}
+{% extends 'dashboard/user_dashboard/dashboard.html' %}
+{% block morecss %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+{% load crispy_forms_tags %}
+
+{% load crispy_forms_tags %}
+{% block body %}
+    <center>
+{#        <div class="row" style="max-width: 500px; margin: auto">#}
+{#            <div class="col-12">#}
+                <div class="card" style="max-width: 500px; margin: auto">
+                    <div class="card-body">
+                        <h4 class="card-title">Update your profile</h4>
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="btn btn-primary btn-block">Update Profile</button>
+
+                        </form>
+                    </div>
+                </div>
+{#            </div>#}
+{#        </div>#}
+    </center>
+{% endblock %}

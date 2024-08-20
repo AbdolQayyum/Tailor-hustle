@@ -1,0 +1,135 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+            </div>
+
+            <div class="col-md-6">
+                {% for post in posts %}
+                    <div class="card card-signin my-5">
+                        <div class="card-body">
+                            {% if post.user.picture %}
+                                <a href="{{ post.user.get_absolute_url }}"><img
+                                        src="{{ post.user.picture.url }}" class="rounded-circle" width="30"
+                                        height="30" alt=""></a>
+                            {% else %}
+                                <a href="{{ post.user.get_absolute_url }}"><img
+                                        src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
+                                        class="rounded-circle" width="30"
+                                        height="30" alt=""></a>
+                            {% endif %}
+                            <a class="text-dark"
+                               href="{{ post.user.get_absolute_url }}"><b>{{ post.user.full_name }}</b></a>&nbsp&nbsp
+                            <small class="text-muted">Posted on {{ post.date_posted|date:"d N Y" }}</small>
+                            <a href="{% url 'post_detail_view' post.id %}"><span style="color: black; position: absolute; right: 2rem; margin-top: 5px" class="fas fa-arrow" >i</span></a>
+                            {% if post.user.user_type == 'brand' %}<span style="color: black; position: absolute; right: 1rem;"><small><a target="_blank" href="https://wa.me/{{ post.user.phone_number }}?text=@@ Customer From Tailor Hustle @@ - Name: {{ request.user.first_name }} {{ request.user.last_name }}"><button>contact</button></a></small></span>{% endif %}
+
+                        </div>
+                        <center>
+                            {% if post.post_type == 'image' %}
+                                <a href="{% url 'post_detail_view' post.id %}"><img class="card-img-top"
+                                                                                    src="{{ post.post_file.url }}"
+                                                                                    alt=""
+                                                                                    style="width: 99%; height: auto"></a>
+                            {% endif %}
+                        {% if post.post_type == 'video' %}
+                                <a href="{% url 'post_detail_view' post.id %}"><video class="card-img-top" controls
+                                                                                    style="width: 100%; max-height: 440px">
+                                    <source src="/media/{{ post.post_file }}"></source>
+                                </video></a>
+                            {% endif %}
+                        </center>
+                        <hr>
+                        {% if post.tags %}
+                            {#                            <div class="card-body"></div>#}
+                            <p class="card-text text-dark ml-4">{{ post.description }}</p>
+                        {% endif %}
+
+                        {% if post.tags %}
+                            <small class="text-default ml-4"><b>Tags:</b> <i>{{ post.tags }}</i></small>
+                        {% endif %}
+
+                        <div class="card-footer">
+
+                            <button class="btn btn-white mr-3 like" id="{{ post.id }}">
+                                {% if post in liked_post %}
+                                    <a href="{% url 'post-like' %}" style="color:red;" id="likebtn{{ post.id }}">
+                                        <i class="fas fa-heart"></i></a> | {{ post.post_likes }}
+                                {% else %}
+                                    <a href="{% url 'post-like' %}" style="color:green;" id="likebtn{{ post.id }}">
+                                        <span class="far fa-heart"></span></a> | {{ post.post_likes }}
+                                {% endif %}
+                            </button>
+
+                        <b class="btn "><span class="far fa-eye"></span> | {{ post.post_views }}</b>
+
+                            <a class="btn btn-outline-info" href="{% url 'post_detail_view' post.id %}">Comments
+                                | {{ post.post_comments }}</a>
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-3">
+        </div>
+    </div>
+
+    {% if is_paginated %}
+
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        {% endif %}
+
+    {% endif %}
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(".like").click(function (e) {
+            var id = this.id;
+            var href = $('.like').find('a').attr('href');
+            e.preventDefault();
+
+            $.ajax({
+                type: "GET",
+                url: href,
+                data: {
+                    'likeId': id
+                },
+                success: function (response) {
+                    if (response.liked) {
+                        $('#likebtn' + id).html("<i class='fas fa-heart'></i> {{ post.post_likes }}");
+                        $('#likebtn' + id).css("color", "red")
+                    } else {
+                        $('#likebtn' + id).html("<span class='far fa-heart'></span> {{ post.post_likes }}");
+                        $('#likebtn' + id).css("color", "green")
+                    }
+                }
+            })
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,212 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none !important;
+    color: white !important;
+}
+/* navbar */
+
+.navl {
+    margin: auto;
+    width: 88%;
+}
+
+nav {
+    padding: .5rem;
+    background-color: rgb(221, 221, 221);
+    padding-top: 15px;
+    justify-content: center;
+    color: whitesmoke;
+    top: 0;
+}
+
+.nav-iem {
+    padding-left: 20px;
+}
+
+.logo {
+    width: 65px;
+    height: 40px;
+    border-radius: .5rem;
+}
+
+.avtar {
+    padding-right: .8rem;
+}
+/* Start */
+
+.Home {
+    height: 75vh;
+    margin-top: 4.1rem;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, .2);
+}
+
+.our_work {
+    width: 95%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 55px;
+}
+
+.label {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 30px;
+    font-weight: 500;
+}
+
+.jumbotron {
+    padding: 70px 30px 70px 30px;
+    margin: 0px auto;
+    color: #cfa224;
+    font-weight: 900;
+}
+/* card */
+
+.cinfo {
+    font-weight: 600;
+}
+
+.card {
+    margin-top: 2rem;
+    cursor: pointer;
+    transition: box-shadow .1s ease;
+}
+
+.card:hover {
+    cursor: pointer;
+    box-shadow: inset -1px 3px 8px 5px rgb(253, 253, 253), 2px 5px 16px 5px rgb(177, 177, 177), -2px 0px 35px 28px rgba(0, 0, 0, -1);
+    transform: scale(1.002);
+}
+
+.card-body {
+    background-color: rgb(241, 241, 241);
+}
+/* footer */
+
+footer {
+    background-color: #131A22;
+    /* background-color: rgb(41, 41, 41); */
+    width: 100%;
+    color: white;
+    text-align: center;
+    justify-content: center;
+    padding: .5rem;
+    bottom: 0;
+    position: absolute;
+    height: 4rem;
+}
+
+.btn:hover {
+    cursor: pointer;
+    transform: scale(1.15);
+}
+
+.carousel {
+    background-color: gray;
+}
+
+.carousel-item {
+    height: 400px;
+}
+
+.carousel-item img {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    min-height: 400px;
+}
+
+#carouselButton {
+    right: 0px;
+    position: absolute;
+    bottom: 0px;
+}
+
+.row-content {
+    margin: 0px auto;
+    padding: 50px 0px 50px 0px;
+    border-bottom: 1px ridge;
+    min-height: 200px;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+.column {
+    float: left;
+    width: 33.3%;
+    margin-bottom: 16px;
+    padding: 0 8px;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin: 10px;
+}
+
+.about-section {
+    padding: 50px;
+    text-align: center;
+    background-color: #474e5d;
+    color: white;
+}
+
+.container {
+    padding: 0 16px;
+}
+
+.container::after,
+.row::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.title {
+    color: grey;
+}
+
+.button {
+    border: none;
+    outline: 0;
+    display: inline-block;
+    padding: 8px;
+    color: white;
+    background-color: #cfa224;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+}
+
+.button:hover {
+    background-color: #555;
+}
+
+@media screen and (max-width: 650px) {
+    .column {
+        width: 100%;
+        display: block;
+    }
+}

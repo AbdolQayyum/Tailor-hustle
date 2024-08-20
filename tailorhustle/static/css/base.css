@@ -1,0 +1,13 @@
+/* hide and show get in touch section */
+
+#content-desktop {display: block;}
+#content-mobile {display: none;}
+
+@media screen and (max-width: 868px) {
+
+#content-desktop {display: none;}
+#content-mobile {display: block;}
+
+}
+
+/* hide and show get in touch section */

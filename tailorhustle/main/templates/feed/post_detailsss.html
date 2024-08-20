@@ -1,0 +1,117 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card card-signin my-5">
+                    <div class="card-body">
+                        <a href="{{ post.user.get_absolute_url }}"><img
+                                src="{{ post.user.picture }}" class="rounded-circle" width="30"
+                                height="30" alt=""></a>
+                        <a class="text-dark"
+                           href="{{ post.user.get_absolute_url }}"><b>{{ post.user.full_name }}</b></a>
+                        <br><small class="text-muted">Posted on {{ post.date_posted }}</small>
+                        <br><br>
+                        <p class="card-text text-dark">{{ post.description }}</p>
+                    </div>
+                    <a href="{{ post.post_file.url }}"><img class="card-img-top" src="{{ post.post_file.url }}" alt=""></a>
+                    {% if post.tags %}
+                        <br><p class="text-danger ml-3"><b>Tags: <i>{{ post.tags }}</i></b></p>
+                    {% endif %}
+                    <div class="card-footer">
+                        <button class="btn btn-white mr-3 like" id="{{ post.id }}">
+                            {% if is_liked %}
+                                <a href="{% url 'post-like' %}" style="color:red;" id="likebtn{{ post.id }}"> Unlike
+                                    | {{ post.likes.count }}</a>
+                            {% else %}
+                                <a href="{% url 'post-like' %}" style="color:green;" id="likebtn{{ post.id }}"> Like
+                                    | {{ post.likes.count }}</a>
+                            {% endif %}
+                        </button>
+
+                        {% if post.user == user %}
+                            <a class="btn btn-outline-info mr-3" href="{% url 'post-update' post.id %}">Update</a>
+                            <a class="btn btn-outline-danger" href="{% url 'post-delete' post.id %}">Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card card-signin my-5">
+                    <div class="card-body">
+                        <form class="form-signin" method="POST">
+                            {% csrf_token %}
+                            <fieldset class="form-group"><br>
+                                {{ form|crispy }}
+                            </fieldset>
+                            <div class="form-group">
+                                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Comment
+                                </button>
+                                <br>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h4>Comments</h4>
+        <div class="row">
+            <div class="col-md-8">
+                {% if post.comments_set.all %}
+                    <div class="card card-signin my-5">
+                        {% for detail in post.comments_set.all %}
+                            <div class="card-body">
+                                <a href="{{ detail.user.get_absolute_url }}">
+                                    <img src="{{ detail.user.picture }}" class="rounded-circle" width="30"
+                                         height="30" alt="">
+                                </a>
+                                <a class="text-dark"
+                                   href="{{ detail.user.get_absolute_url }}"><b>{{ detail.user.username }}</b></a>
+                                <br><small>{{ detail.comment_date }}</small><br><br>
+                                <p class="card-text text-dark">{{ detail.comment }}</p>
+                            </div>
+                            <hr class="my-1">
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No comments to show!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(".like").click(function (e) {
+            var id = this.id;
+            var href = $('.like').find('a').attr('href');
+            e.preventDefault();
+
+            $.ajax({
+                url: href,
+                data: {
+                    'likeId': id
+                },
+                success: function (response) {
+                    if (response.liked) {
+                        $('#likebtn' + id).html("Unlike | {{post.likes.count}}");
+                        $('#likebtn' + id).css("color", "red")
+                    } else {
+                        $('#likebtn' + id).html("Like | {{post.likes.count}}");
+                        $('#likebtn' + id).css("color", "green")
+                    }
+                }
+            })
+        });
+    </script>
+{% endblock %}

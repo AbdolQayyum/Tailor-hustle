@@ -1,0 +1,145 @@
+{% load static %}
+
+<header class="sticky-top">
+    {% if request.user.username %}
+        {#      <center>#}
+        {#            <p id="content-mobile" style="padding-top: 5px; top: 0; width: 100%;">Tailor Hustle</p>#}
+        {#      </center>#}
+        <nav id="content-desktop" class="navbar navbar-light bg-white border-bottom py-1">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <img src="{% static 'images/tailorhustle_images/tailorhustle.png' %}" class="nav__insta__logo">
+                </a>
+
+                <!-- Search -->
+                <div class="search__input m-auto d-none d-md-block">
+
+                    <!-- Form to search Users -->
+                    <form method="POST" action="{% url 'search_posts' %}" class="form-inline ml-5">
+                        {% csrf_token %}
+                        <input style="max-width:20rem; width: 20rem" autocapitalize="none" placeholder="Search Posts"
+                               class="form-control ml-5" name="p" type="text">
+                        <button type="submit" class="ml-2 btn p-0">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </form>
+                    <!-- Form to search Users End -->
+
+                </div>
+
+                <!-- Other icons -->
+                <ul class="navbar-nav ml-0 ml-md-auto d-flex flex-row">
+
+                    <!-- Home Button -->
+                    <!-- <li class="nav-item px-md-3 px-2 d-flex flex-column justify-content-center">
+                      <a href="" class="text-decoration-none text-reset"><span class="nav__icons fa fa-home"></span></a>
+                    </li> -->
+
+                    <!-- Explore View Button -->
+                    <!-- <li class="nav-item px-md-3 px-2 d-flex flex-column justify-content-center">
+                      <a href="" class="text-decoration-none text-reset"><span class="nav__icons far fa-compass"></span></a>
+                    </li> -->
+
+                    <!-- Liked Posts Button -->
+                    <!-- <li class="nav-item px-md-3 px-2 d-flex flex-column justify-content-center">
+                      <a href="" class="text-decoration-none text-reset"><span class="nav__icons far fa-heart"></span></a>
+                    </li> -->
+
+                    <!-- Liked Posts Button -->
+                    <!-- <li class="nav-item px-md-3 px-2 d-flex flex-column justify-content-center">
+                      <a href="" class="text-decoration-none text-reset"><span class="nav__icons far fa-heart"></span></a>
+                    </li> -->
+                    <!-- Liked Posts Button -->
+                    <li class="nav-item px-md-3 px-2 d-flex flex-column justify-content-center">
+                        <a href="/post/new/" class="text-decoration-none text-reset"><span
+                                class="nav__icons far fa-circle-plus">+</span></a>
+                    </li>
+
+                    <li class="nav-item dropdown ml-2 px-md-3" style="cursor: pointer;">
+                        <a class="nav-link" id="user__avatar" data-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded="false" style="padding-top: inherit;padding: inherit;">
+
+                            <span class="nav__icons far fa-bell"></span>
+
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user__avatar">
+                            <!-- Loop for notifications -->
+                            <center>
+                                {% for notification in user.get_notifications|slice:":7" %}
+{#                                {% for notification in notifictions %}#}
+                                    <div class="card card-signin my-3">
+                                        <span><small> {{ notification.ago }} </small> <small> 🟢 </small> {{ notification.message }}</span>
+                                    </div>
+                                {% endfor %}
+                            </center>
+                        </div>
+                    </li>
+
+                    <!-- Dropdown for more menu -->
+                    <li class="nav-item dropdown ml-2" style="cursor: pointer;">
+                        <a class="nav-link dropdown-toggle" id="user__avatar" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false" style="padding-top: inherit;padding: inherit;">
+
+                            <!-- User's Profile Picture -->
+                            {% if request.user.picture %}
+                                <img src="{{ request.user.picture.url }}" class="rounded-circle z-depth-0 profile__pic">
+                            {% else %}
+                                <img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
+                                     class="rounded-circle z-depth-0">
+                            {% endif %}
+                            <!-- User's Profile Picture End -->
+
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user__avatar">
+
+                            <center>
+                                <p style="margin: 6px;"><b>-- {{ request.user.full_name }} --</b></p>
+                            </center>
+
+                            <!-- Profile View Button -->
+                            <a class="dropdown-item" href="{% url 'profile_view' request.user.username %}">
+                                <span class="mr-3 fa fa-user-circle"></span>View Profile
+                            </a>
+
+                            <!-- Saved posts Button -->
+                            <!-- <a class="dropdown-item" href="">
+                              <span class="mr-3 fa fa-bookmark"></span>Saved
+                            </a> -->
+
+                            <!-- Dashboard Info -->
+                            {% if request.user.user_type == 'brand' %}
+                                <a class="dropdown-item" href="{% url 'store_dashboard' %}">
+                                    <span class="mr-3 fa fa-desktop"></span>Brand Dashboard
+                                </a>
+                            {% endif %}
+
+                            <!-- Change Info -->
+                            <a class="dropdown-item" href="{% url 'edit_profile' request.user.username %}">
+                                <span class="mr-3 fa fa-cog"></span>Profile Setting
+                            </a>
+
+                            <!-- Change Password Button -->
+                            <a class="dropdown-item" href="{% url 'password_reset' %}">
+                                <span class="mr-3 fa fa-key"></span>Change Password
+                            </a>
+
+
+                            <div class="dropdown-divider"></div>
+
+                            <div class="dropdown-item">
+
+                                <!-- Signout Button -->
+                                <form method="Get" action="{% url 'signout_url' %}">
+                                    {% csrf_token %}
+                                    <a href="javascript:;" onclick="parentNode.submit();"
+                                       class="text-reset text-decoration-none">Sign Out</a>
+                                </form>
+
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    {% endif %}
+</header>
